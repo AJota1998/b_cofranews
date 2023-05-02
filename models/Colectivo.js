@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var ColectivoSchema = new Schema({
+var Colectivo = new Schema({
   nombreColectivo: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
   contrasena: { type: String, required: true },
@@ -19,4 +19,4 @@ var ColectivoSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("Colectivo", ColectivoSchema);
+module.exports = mongoose.model("Colectivo", Colectivo);

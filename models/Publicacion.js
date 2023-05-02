@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 var Colectivo = require("../models/Colectivo");
 
-var PublicacionSchema = new Schema({
+var Publicacion = new Schema({
     idColectivo: { type: Schema.ObjectId, ref: "Colectivo" },
     tipo: { type: String, enum: ['Noticia', 'Mensaje', 'Foto', 'Video'], required: true },
     titulo: { type: String }, 
@@ -13,4 +13,4 @@ var PublicacionSchema = new Schema({
     fechaPublicacion: { type: Date, default: Date.now },
   });
   
-module.exports = mongoose.model("Publicacion", PublicacionSchema);
+module.exports = mongoose.model("Publicacion", Publicacion);
