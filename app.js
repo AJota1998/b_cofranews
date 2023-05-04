@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', require('./routes/usuario'));
+app.use('/api', require('./routes/colectivo'));
 
 const dotenv = require("dotenv");
 dotenv.config();
