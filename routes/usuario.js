@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     
 	const token = jwt.sign({_id: user._id}, 'secretKey');
 
-    return res.status(200).json({token});
+    return res.status(200).json({token, rol: user.rol});
 });
 
 router.get('/task', (req, res) => {
