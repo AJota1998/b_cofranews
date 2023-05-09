@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/AJota1998/b_cofranews#readme",
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

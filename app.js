@@ -8,6 +8,8 @@ app.use(cors());
 
 app.use('/api', require('./routes/usuario'));
 app.use('/api', require('./routes/colectivo'));
+app.use('/api', require('./routes/espacio'));
+app.use('/api', require('./routes/publicacion'));
 
 const dotenv = require("dotenv");
 dotenv.config();
