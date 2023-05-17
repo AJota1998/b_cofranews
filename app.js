@@ -3,6 +3,7 @@ const app = express();
 const PORT = 5000;
 const cors = require('cors');
 
+
 app.use(express.json());
 app.use(cors());
 
@@ -23,6 +24,5 @@ mongoose
   .then(() => console.log("connection successful"))
   .catch((err) => console.error(err));
 var db = mongoose.connection;
-
 
 app.listen(PORT, () => console.log('listening on port 5000'));

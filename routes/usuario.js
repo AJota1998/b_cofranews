@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcrypt');
 
+const uploadFile = require('../middleware/multer');
+
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registroUser', async (req, res) => {
