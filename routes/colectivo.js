@@ -30,7 +30,7 @@ router.post('/login-colectivo', async (req, res) => {
     
 	const token = jwt.sign({_id: colectivo._id}, 'secretKey');
 
-    return res.status(200).json({token});
+    return res.status(200).json({token, correo: colectivo.correo});
 });
 
 router.get('/task', (req, res) => {
@@ -50,21 +50,18 @@ router.get('/task', (req, res) => {
     ])
 })
 
-router.get('/private-task', verifyToken, (req, res) => {
-    res.json([
-        {
-            _id: 1,
-            nombre: "tarea1"
-        }, 
-        {
-            _id: 2,
-            nombre: "tarea2"
-        }, 
-        {
-            _id: 3,
-            nombre: "tarea3"
+router.get('/perfil-colectivo', (req, res) => {
+
+    const valor = req.query.propiedad;
+
+    Colectivo.find({correo: valor})
+    .then(function (err, colectivo) {
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(colectivo);
         }
-    ])
+    })
 })
 
 function verifyToken(req, res, next) {

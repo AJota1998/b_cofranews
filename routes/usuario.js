@@ -12,8 +12,8 @@ const uploadFile = require('../middleware/multer');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registroUser', async (req, res) => {
-    const { nombre, nombreUsuario, correoElectronico, contrasena, rol } = req.body;
-    const newUser = new User({nombre, nombreUsuario, correoElectronico, contrasena, rol})
+    const { nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios } = req.body;
+    const newUser = new User({nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios})
     console.log(newUser);
     await newUser.save();
 
@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
     
 	const token = jwt.sign({_id: user._id}, 'secretKey');
 
-    return res.status(200).json({token, rol: user.rol});
+    return res.status(200).json({token, rol: user.rol, correoElectronico: user.correoElectronico});
 });
 
 router.get('/task', (req, res) => {
@@ -52,21 +52,34 @@ router.get('/task', (req, res) => {
     ])
 })
 
-router.get('/private-task', verifyToken, (req, res) => {
-    res.json([
-        {
-            _id: 1,
-            nombre: "tarea1"
-        }, 
-        {
-            _id: 2,
-            nombre: "tarea2"
-        }, 
-        {
-            _id: 3,
-            nombre: "tarea3"
+
+// Obtener los espacios que sigue el usuario
+router.get('/private-task', (req, res) => {
+    
+    const valor = req.query.propiedad;
+
+    User.find({correoElectronico: valor}, {espacios: 1, nombre: 1, _id: 0}).sort("-nombre").populate("espacios", "nombre")
+    .then(function (err, user) {
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(user)
+        } 
+    })
+})
+
+router.get('/perfil-usuario', (req, res) => {
+    
+    const valor = req.query.propiedad;
+
+    User.findOne({correoElectronico: valor}, {espacios: 0}).
+    then(function (err, user) {
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(user)
         }
-    ])
+    })
 })
 
 function verifyToken(req, res, next) {
