@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router, response } = require('express');
 const router = Router();
 
 const jwt = require('jsonwebtoken');
@@ -15,6 +15,20 @@ router.post('/crear-publicacion', async (req, res) => {
     console.log(newPublicacion);
     await newPublicacion.save();
     res.status(200).send("Publicación creada correctamente");
+})
+
+router.get('/publicaciones', async function (req, res) {
+    const valor = req.query.propiedad
+
+   Publicacion.find({idColectivo: valor})
+   .then(function (err, publicacion) {
+        if (err) {
+            return res.send(err)
+        } else {
+            res.status(200).json(publicacion)
+        }
+   })
+
 })
 
 module.exports = router;

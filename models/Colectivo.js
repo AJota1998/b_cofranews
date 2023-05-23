@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 
+
 var Colectivo = new Schema({
   nombreColectivo: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
@@ -13,11 +14,9 @@ var Colectivo = new Schema({
   localidad: { type: String },
   imagenPerfil: { type: String },
   informacion: {
-    type: {
-      nombre: { type: String },
-      anoFundacion: { type: Number },
-      descripcion: { type: String }
-    }
+    nombre: {type: String},
+    anoFundacion: {type: Number},
+    descripcion: {type: String}
   }
 });
 

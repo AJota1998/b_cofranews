@@ -3,6 +3,7 @@ const router = Router();
 
 const Colectivo = require('../models/Colectivo');
 
+
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcrypt');
@@ -10,7 +11,9 @@ const bcrypt = require('bcrypt');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registro-colectivo', async (req, res) => {
-    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad } = req.body;
+
+    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad} = req.body;
+    
     const newColectivo = new Colectivo({nombreColectivo, correo, contrasena, tipo, provincia, localidad});
     console.log(newColectivo);
     await newColectivo.save();
@@ -30,7 +33,7 @@ router.post('/login-colectivo', async (req, res) => {
     
 	const token = jwt.sign({_id: colectivo._id}, 'secretKey');
 
-    return res.status(200).json({token, correo: colectivo.correo});
+    return res.status(200).json({token, correo: colectivo.correo, id: colectivo._id});
 });
 
 router.get('/task', (req, res) => {
