@@ -13,11 +13,8 @@ var Colectivo = new Schema({
   provincia: { type: String },
   localidad: { type: String },
   imagenPerfil: { type: String },
-  informacion: {
-    nombre: {type: String},
-    anoFundacion: {type: Number},
-    descripcion: {type: String}
-  }
+  anoFundacion: {type: Number},
+  descripcion: {type: String}
 });
 
 Colectivo.pre('save',function(next){

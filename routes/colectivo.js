@@ -12,9 +12,9 @@ router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registro-colectivo', async (req, res) => {
 
-    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad} = req.body;
+    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion} = req.body;
     
-    const newColectivo = new Colectivo({nombreColectivo, correo, contrasena, tipo, provincia, localidad});
+    const newColectivo = new Colectivo({nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion});
     console.log(newColectivo);
     await newColectivo.save();
 
@@ -59,6 +59,20 @@ router.get('/perfil-colectivo', (req, res) => {
 
     Colectivo.find({correo: valor})
     .then(function (err, colectivo) {
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(colectivo);
+        }
+    })
+})
+
+router.get('/info-colectivo', (req, res) => {
+
+    const valor = req.query.propiedad;
+
+    Colectivo.find({correo: valor}, {nombreColectivo: 1, anoFundacion: 1, descripcion:1})
+    .then(function (err, colectivo){
         if (err) {
             return res.send(err);
         } else {
