@@ -20,7 +20,7 @@ router.post('/registro-colectivo', async (req, res) => {
 
     const token = jwt.sign({_id: newColectivo._id}, 'secretKey')
     
-   res.status(200).json({token});
+   res.status(200).json({token, correo: newColectivo.correo, id: newColectivo._id });
 })
 
 router.post('/login-colectivo', async (req, res) => {
