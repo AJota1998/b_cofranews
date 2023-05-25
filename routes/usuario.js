@@ -82,6 +82,17 @@ router.get('/perfil-usuario', (req, res) => {
     })
 })
 
+router.get('/all-users', (req, res) => {
+    User.find()
+    .then(function (err, user) {
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(user)
+        }
+    })
+})
+
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send("No está autorizado");

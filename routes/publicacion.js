@@ -28,7 +28,18 @@ router.get('/publicaciones', async function (req, res) {
             res.status(200).json(publicacion)
         }
    })
+})
 
+router.get('/all-publicaciones', async (req, res) => {
+   
+    Publicacion.find()
+   .then(function (err, publicacion) {
+        if (err) {
+            return res.send(err)
+        } else {
+            res.status(200).json(publicacion)
+        }
+   })  
 })
 
 module.exports = router;

@@ -81,6 +81,18 @@ router.get('/info-colectivo', (req, res) => {
     })
 })
 
+router.get('/all-colectivos', (req, res) => {
+
+    Colectivo.find()
+    .then(function (err, colectivo){
+        if (err) {
+            return res.send(err);
+        } else {
+            res.status(200).json(colectivo);
+        }
+    })
+})
+
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send("No está autorizado");
