@@ -72,7 +72,7 @@ router.get('/perfil-usuario', (req, res) => {
     
     const valor = req.query.propiedad;
 
-    User.findOne({correoElectronico: valor}, {espacios: 0}).
+    User.find({correoElectronico: valor}, {espacios: 0}).
     then(function (err, user) {
         if (err) {
             return res.send(err);
