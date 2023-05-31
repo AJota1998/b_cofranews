@@ -93,6 +93,31 @@ router.get('/all-users', (req, res) => {
     })
 })
 
+router.put('/seguir-espacio', (req, res) => {
+
+    const espacio = req.query.propiedad;
+    const correo = req.query.propiedad2;
+
+    User.findOne({correoElectronico: correo}, function (err, user) {
+        if (err) {
+            console.log(err);
+            return
+        }
+
+        if (user) {
+            console.log(user)
+            User.updateOne({correoElectronico: correo}, { $push: { espacios: espacio }}, function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.status(200).json("Resultado", "Espacio añadido correctamente");
+                }
+            })
+        }
+    })
+
+})
+
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send("No está autorizado");

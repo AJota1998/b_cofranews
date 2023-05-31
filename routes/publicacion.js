@@ -42,4 +42,17 @@ router.get('/all-publicaciones', async (req, res) => {
    })  
 })
 
+router.get('/contenido-espacios', async (req, res) => {
+    const valor = req.query.propiedad 
+
+    Publicacion.find({idEspacio: valor})
+    .then(function (err, publicacion) {
+        if (err) {
+            return res.send(err)
+        } else {
+            res.status(200).json(publicacion)
+        }
+    })
+})
+
 module.exports = router;
