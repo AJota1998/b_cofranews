@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const router = Router();
+var SALT_WORK_FACTOR = 10;
 
 const User = require('../models/Usuario');
 
@@ -28,6 +29,8 @@ router.post('/login', async (req, res) => {
     
     if (!user) return res.status(401).send('El correo no existe');
     let compare = bcrypt.compareSync(contrasena, user.contrasena);
+    console.log(contrasena)
+    console.log(user.contrasena)
     if(!compare) return res.status(401).send('la contraseña no coincide');
     
 	const token = jwt.sign({_id: user._id}, 'secretKey');
@@ -93,30 +96,86 @@ router.get('/all-users', (req, res) => {
     })
 })
 
-router.put('/seguir-espacio', (req, res) => {
-
-    const espacio = req.query.propiedad;
-    const correo = req.query.propiedad2;
-
-    User.findOne({correoElectronico: correo}, function (err, user) {
-        if (err) {
-            console.log(err);
-            return
+router.put('/seguir-espacio', async (req, res) => {
+    const espacio = req.body.propiedad;
+    const correo = req.body.propiedad2;
+  
+    try {
+      const user = await User.findOne({ correoElectronico: correo });
+  
+      if (user) {
+        console.log(user);
+  
+        if (user.espacios.includes(espacio)) {
+          console.log("El espacio ya está añadido para este usuario");
+          res.status(400).json({ message: "El espacio ya está añadido para este usuario" });
+        } else {
+          await User.updateOne({ correoElectronico: correo }, { $push: { espacios: espacio } });
+          console.log("Espacio añadido correctamente");
+          res.status(200).json({ message: "Espacio añadido correctamente" });
         }
+      } else {
+        res.status(404).json({ message: "Usuario no encontrado" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  });
 
-        if (user) {
-            console.log(user)
-            User.updateOne({correoElectronico: correo}, { $push: { espacios: espacio }}, function (err, result) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.status(200).json("Resultado", "Espacio añadido correctamente");
-                }
-            })
+  router.put('/abandonar-espacio', async (req, res) => {
+    const espacioId = req.body.propiedad;
+    const correo = req.body.propiedad2;
+    console.log(espacioId)
+  
+    try {
+      const user = await User.findOne({ correoElectronico: correo });
+  
+      if (user) {
+        console.log(user);
+  
+        if (user.espacios.includes(espacioId)) {
+            await User.updateOne({ correoElectronico: correo }, { $pull: { espacios: espacioId } });
+            console.log("Espacio dejado de seguir");
+            res.status(200).json({ message: "Espacio dejado de seguir" });
+          } else {
+            console.log("El usuario no sigue este espacio");
+            res.status(400).json({ message: "El usuario no sigue este espacio" });
+          }
+        } else {
+          res.status(404).json({ message: "Usuario no encontrado" });
         }
-    })
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  });
+  
+  
+  router.put('/actualizar-usuario', async (req, res) => {
+    const usuario = req.body;
+    console.log(usuario);
+  
+    try {
+        //const hashedPassword = await bcrypt.hash(usuario.contrasena, 10);
+        //usuario.contrasena = hashedPassword;
+        const user = await User.findOneAndUpdate({ _id: usuario._id }, usuario, { new: true });
+  
+      if (user) {
+        console.log(user);
+        res.status(200).json({ message: 'Usuario actualizado correctamente', user });
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  });
+  
+  
 
-})
+
 
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
