@@ -55,4 +55,17 @@ router.get('/contenido-espacios', async (req, res) => {
     })
 })
 
+router.delete('/eliminar-publicacion/:id', async (req, res) => {
+    try {
+      const id = req.params.id;
+  
+      // Busca y elimina la publicación por su ID
+      await Publicacion.findByIdAndDelete(id);
+  
+      res.status(200).json({ message: 'Publicación eliminada correctamente' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error al eliminar la publicación' });
+    }
+  });
+
 module.exports = router;

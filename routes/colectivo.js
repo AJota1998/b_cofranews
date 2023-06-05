@@ -93,6 +93,27 @@ router.get('/all-colectivos', (req, res) => {
     })
 })
 
+router.put('/actualizar-colectivo', async (req, res) => {
+    const colectivo = req.body;
+    console.log(colectivo);
+  
+    try {
+        //const hashedPassword = await bcrypt.hash(usuario.contrasena, 10);
+        //usuario.contrasena = hashedPassword;
+        const user = await Colectivo.findOneAndUpdate({ _id: colectivo._id }, colectivo, { new: true });
+  
+      if (colectivo) {
+        console.log(colectivo);
+        res.status(200).json({ message: 'Colectivo actualizado correctamente', colectivo });
+      } else {
+        res.status(404).json({ message: 'Colectivo no encontrado' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  });
+
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send("No está autorizado");

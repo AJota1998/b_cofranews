@@ -49,5 +49,118 @@ router.get('/espacios-colectivo', async function (req, res) {
 })
 
 
+router.put('/pertenecer-espacio', async (req, res) => {
+
+    const id_colectivo = req.body.propiedad;
+    const id_espacio = req.body.propiedad2;
+
+    try {
+    
+        if(await verificarYAgregarColectivo(id_espacio, id_colectivo)) {
+            res.status(200).json({ message: 'Colectivo agregado correctamente al espacio.' });
+        } else {
+            res.status(500).json({ error: 'Error al agregar el colectivo al espacio.' });
+        }
+        
+      } catch (error) {
+        console.log(error)
+      }
+}) 
+
+async function verificarYAgregarColectivo(idEspacio, idColectivo) {
+    try {
+      // Busca el espacio por su ID
+      const espacio = await Espacio.findById(idEspacio);
+  
+      if (espacio) {
+        // Verifica si el ID de colectivo ya existe en el array de IDs de colectivos del espacio
+        if (!espacio.colectivos.includes(idColectivo)) {
+          // Agrega el ID de colectivo al array de IDs de colectivos del espacio
+          espacio.colectivos.push(idColectivo);
+  
+          // Guarda los cambios en la base de datos
+          await espacio.save();
+  
+          console.log('El ID de colectivo ha sido agregado al espacio.');
+          return true;
+        } else {
+          console.log('El ID de colectivo ya existe en el espacio.');
+          return false;
+        }
+      } else {
+        console.log('No se encontró el espacio con el ID proporcionado.');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al verificar y agregar el ID de colectivo:', error);
+    } 
+}
+
+router.put('/salir-espacio', async (req, res) => {
+
+    const id_colectivo = req.body.propiedad;
+    const id_espacio = req.body.propiedad2;
+
+    try {
+    
+        if(await verificarYEliminarColectivo(id_espacio, id_colectivo)) {
+            res.status(200).json({ message: 'Colectivo retirado correctamente del espacio.' });
+        } else {
+            res.status(500).json({ error: 'Error al eliminar el colectivo del espacio.' });
+        }
+        
+      } catch (error) {
+        console.log(error)
+      }
+}) 
+
+async function verificarYEliminarColectivo(idEspacio, idColectivo) {
+  try {
+    const espacio = await Espacio.findById(idEspacio); // Busca el documento por su ID
+
+    if (espacio) {
+      // Verifica si el ID de colectivo existe en el campo de array del espacio
+      const index = espacio.colectivos.indexOf(idColectivo);
+
+      if (index !== -1) {
+        // Elimina el ID de colectivo del campo de array del espacio
+        espacio.colectivos.splice(index, 1);
+
+        // Guarda los cambios en el documento
+        await espacio.save();
+
+        console.log('El ID de colectivo ha sido eliminado del espacio.');
+        return true;
+      } else {
+        console.log('El ID de colectivo no existe en el espacio.');
+        return false;
+      }
+    } else {
+      console.log('No se encontró el espacio con el ID proporcionado.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error al verificar y eliminar el ID de colectivo:', error);
+    return false;
+  }
+}
+
+router.post('/verificar', async (req, res) => {
+    try {
+      const id_colectivo = req.body.id_colectivo;
+  
+      const espacios = await Espacio.find({ colectivos: id_colectivo });
+      const incluido = espacios.length > 0;
+      console.log(espacios)
+  
+      res.json(incluido);
+    } catch (error) {
+      console.error('Error al verificar el ID del colectivo:', error);
+      res.status(500).json({ error: 'Error al verificar el ID del colectivo' });
+    }
+  });
+
+
+
 
 module.exports = router;
