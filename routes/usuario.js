@@ -174,7 +174,21 @@ router.put('/seguir-espacio', async (req, res) => {
   });
   
   
-
+  router.delete('/eliminar-usuario/:id', async (req, res) => {
+    const usuarioId = req.params.id;
+    try {
+      const usuarioEliminado = await User.findByIdAndDelete(usuarioId);
+      if (usuarioEliminado) {
+        console.log('Usuario eliminado correctamente:', usuarioEliminado);
+        res.status(200).send('Usuario eliminado correctamente');
+      } else {
+        res.status(404).send('No se encontró el usuario');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el usuario:', error);
+      res.status(500).send('Error al eliminar el usuario');
+    }
+  });
 
 
 function verifyToken(req, res, next) {

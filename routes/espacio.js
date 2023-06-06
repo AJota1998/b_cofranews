@@ -160,7 +160,53 @@ router.post('/verificar', async (req, res) => {
     }
   });
 
+  router.delete('/eliminar-espacio/:id', async (req, res) => {
+    const espacioId = req.params.id;
+    try {
+      const EspacioEliminado = await Espacio.findByIdAndDelete(espacioId);
+      if (EspacioEliminado) {
+        console.log('Espacio eliminado correctamente:', EspacioEliminado);
+        res.status(200).send('Espacio eliminado correctamente');
+      } else {
+        res.status(404).send('No se encontró el espacio');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el espacio:', error);
+      res.status(500).send('Error al eliminar el espacio');
+    }
+  });
 
+  router.get('/espacio_del_colectivo/:colectivoId', async (req, res) => {
+    const colectivoId = req.params.colectivoId;
+    try {
+      const espacios = await Espacio.find({ colectivos: colectivoId });
+      if (espacios.length > 0) {
+        res.json(espacios);
+      } else {
+        res.status(404).send('Este colectivo no pertenece a ningún espacio');
+      }
+    } catch (error) {
+      console.error('Error al buscar el colectivo en los espacios:', error);
+      res.status(500).send('Error al buscar el colectivo en los espacios');
+    }
+  });
+
+  router.delete('/eliminar-colectivo-espacio/:colectivoId', async (req, res) => {
+    const colectivoId = req.params.colectivoId;
+  
+    try {
+      await Espacio.updateMany(
+        { colectivos: colectivoId },
+        { $pull: { colectivos: colectivoId } }
+      );
+  
+      res.status(200).json({ message: 'Colectivo eliminado del espacio correctamente' });
+    } catch (error) {
+      console.error('Error al eliminar el colectivo del espacio:', error);
+      res.status(500).json({ error: 'Error al eliminar el colectivo del espacio' });
+    }
+  });
+  
 
 
 module.exports = router;

@@ -129,4 +129,21 @@ function verifyToken(req, res, next) {
     next();
 }
 
+router.delete('/eliminar-colectivo/:id', async (req, res) => {
+    const colectivoId = req.params.id;
+    try {
+      const colectivoEliminado = await Colectivo.findByIdAndDelete(colectivoId);
+      if (colectivoEliminado) {
+        console.log('Colectivo eliminado correctamente:', colectivoEliminado);
+        res.status(200).send('Colectivo eliminado correctamente');
+      } else {
+        res.status(404).send('No se encontró el colectivo');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el colectivo:', error);
+      res.status(500).send('Error al eliminar el colectivo');
+    }
+  });
+  
+
 module.exports = router;
