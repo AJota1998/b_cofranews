@@ -10,12 +10,25 @@ const Publicacion = require('../models/Publicacion');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/crear-publicacion', async (req, res) => {
-    const {idColectivo, idEspacio, tipo, titulo, contenido, pie, } = req.body;
-    const newPublicacion = new Publicacion({idColectivo, idEspacio, tipo, titulo, contenido, pie});
+    const { idColectivo, idEspacio, tipo, titulo, contenido, pie } = req.body;
+  
+    // Verificar si la publicación está vacía
+    if (!idColectivo || !idEspacio || !tipo || !titulo || !contenido || !pie) {
+      return res.status(400).send("Faltan campos obligatorios");
+    }
+  
+    const newPublicacion = new Publicacion({ idColectivo, idEspacio, tipo, titulo, contenido, pie });
+  
     console.log(newPublicacion);
-    await newPublicacion.save();
-    res.status(200).send("Publicación creada correctamente");
-})
+  
+    try {
+      await newPublicacion.save();
+      res.status(200).send("Publicación creada correctamente");
+    } catch (error) {
+      res.status(500).send("Error al crear la publicación");
+    }
+  });
+  
 
 router.get('/publicaciones', async function (req, res) {
     const valor = req.query.propiedad

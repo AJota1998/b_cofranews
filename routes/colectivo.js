@@ -11,17 +11,26 @@ const bcrypt = require('bcrypt');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registro-colectivo', async (req, res) => {
-
-    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion} = req.body;
-    
-    const newColectivo = new Colectivo({nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion});
+    const { nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion } = req.body;
+  
+    // Verificar si se envió un colectivo vacío
+    if (!nombreColectivo && !correo && !contrasena && !tipo && !provincia && !localidad && !anoFundacion && !descripcion) {
+      return res.status(400).send("Faltan campos obligatorios");
+    }
+  
+    const newColectivo = new Colectivo({ nombreColectivo, correo, contrasena, tipo, provincia, localidad, anoFundacion, descripcion });
     console.log(newColectivo);
-    await newColectivo.save();
-
-    const token = jwt.sign({_id: newColectivo._id}, 'secretKey')
-    
-   res.status(200).json({token, correo: newColectivo.correo, id: newColectivo._id });
-})
+  
+    try {
+      await newColectivo.save();
+  
+      const token = jwt.sign({ _id: newColectivo._id }, 'secretKey');
+      res.status(200).json({ token, correo: newColectivo.correo, id: newColectivo._id });
+    } catch (error) {
+      res.status(500).send("Error al registrar el colectivo");
+    }
+  });
+  
 
 router.post('/login-colectivo', async (req, res) => {
     const { correo, contrasena } = req.body;

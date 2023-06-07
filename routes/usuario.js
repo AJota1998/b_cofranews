@@ -13,15 +13,26 @@ const uploadFile = require('../middleware/multer');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/registroUser', async (req, res) => {
-    const { nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios } = req.body;
-    const newUser = new User({nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios})
-    console.log(newUser);
+  const { nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios } = req.body;
+
+  // Verificar si se envió un usuario vacío
+  if (!nombre && !nombreUsuario && !correoElectronico && !contrasena && !rol) {
+    return res.status(400).send("Faltan campos obligatorios");
+  }
+
+  const newUser = new User({ nombre, nombreUsuario, correoElectronico, contrasena, rol, espacios });
+  console.log(newUser);
+
+  try {
     await newUser.save();
 
-    const token = jwt.sign({_id: newUser._id}, 'secretKey')
-    
-   res.status(200).json({token, correoElectronico: newUser.correoElectronico, rol: newUser.rol});
-})
+    const token = jwt.sign({ _id: newUser._id }, 'secretKey');
+    res.status(200).json({ token, correoElectronico: newUser.correoElectronico, rol: newUser.rol });
+  } catch (error) {
+    res.status(500).send("Error al registrar el usuario");
+  }
+});
+
 
 router.post('/login', async (req, res) => {
     const { correoElectronico, contrasena } = req.body;
@@ -86,15 +97,15 @@ router.get('/perfil-usuario', (req, res) => {
 })
 
 router.get('/all-users', (req, res) => {
-    User.find()
-    .then(function (err, user) {
-        if (err) {
-            return res.send(err);
-        } else {
-            res.status(200).json(user)
-        }
+  User.find({ rol: { $ne: 'Administrador' } })
+    .then(function (users) {
+      res.status(200).json(users);
     })
-})
+    .catch(function (err) {
+      res.status(500).send(err);
+    });
+});
+
 
 router.put('/seguir-espacio', async (req, res) => {
     const espacio = req.body.propiedad;

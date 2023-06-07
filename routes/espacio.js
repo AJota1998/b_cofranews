@@ -12,12 +12,24 @@ const Espacio = require('../models/Espacio');
 router.get('/', (req, res) => res.send("hola mundo"));
 
 router.post('/crear-espacio', async (req, res) => {
-    const {nombre, descripcion, colectivos} = req.body;
-    const newEspacio = new Espacio({nombre, descripcion, colectivos});
-    console.log(newEspacio);
+  const { nombre, descripcion, colectivos } = req.body;
+
+  // Verificar si se envió un espacio con campos faltantes
+  if (!nombre && !descripcion) {
+    return res.status(400).send("Faltan campos obligatorios");
+  }
+
+  const newEspacio = new Espacio({ nombre, descripcion, colectivos });
+  console.log(newEspacio);
+
+  try {
     await newEspacio.save();
     res.status(200).send("Espacio creado correctamente");
-})
+  } catch (error) {
+    res.status(500).send("Error al crear el espacio");
+  }
+});
+
 
 router.get('/explorar', async (req, res) => {
 
