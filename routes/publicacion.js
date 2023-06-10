@@ -33,7 +33,7 @@ router.post('/crear-publicacion', async (req, res) => {
 router.get('/publicaciones', async function (req, res) {
     const valor = req.query.propiedad
 
-   Publicacion.find({idColectivo: valor})
+   Publicacion.find({idColectivo: valor}).sort({ fechaPublicacion: -1 })
    .then(function (err, publicacion) {
         if (err) {
             return res.send(err)
@@ -45,7 +45,7 @@ router.get('/publicaciones', async function (req, res) {
 
 router.get('/all-publicaciones', async (req, res) => {
    
-    Publicacion.find()
+    Publicacion.find().sort({ fechaPublicacion: -1 }).populate('idColectivo', 'nombreColectivo')
    .then(function (err, publicacion) {
         if (err) {
             return res.send(err)
@@ -58,7 +58,7 @@ router.get('/all-publicaciones', async (req, res) => {
 router.get('/contenido-espacios', async (req, res) => {
     const valor = req.query.propiedad 
 
-    Publicacion.find({idEspacio: valor})
+    Publicacion.find({idEspacio: valor}).sort({ fechaPublicacion: -1 }).populate('idColectivo', 'nombreColectivo')
     .then(function (err, publicacion) {
         if (err) {
             return res.send(err)
