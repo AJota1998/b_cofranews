@@ -69,7 +69,7 @@ router.put('/pertenecer-espacio', async (req, res) => {
     try {
     
         if(await verificarYAgregarColectivo(id_espacio, id_colectivo)) {
-            res.status(200).json({ message: 'Colectivo agregado correctamente al espacio.' });
+            res.status(200).json({ message: 'Ahora perteneces a este espacio' });
         } else {
             res.status(500).json({ error: 'Error al agregar el colectivo al espacio.' });
         }

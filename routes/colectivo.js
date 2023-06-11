@@ -36,9 +36,9 @@ router.post('/login-colectivo', async (req, res) => {
     const { correo, contrasena } = req.body;
     const colectivo = await Colectivo.findOne({correo});
     
-    if (!colectivo) return res.status(401).send('El correo no existe');
+    if (!colectivo) return res.status(401).send('Correo o contraseña incorrecta');
     let compare = bcrypt.compareSync(contrasena, colectivo.contrasena);
-    if(!compare) return res.status(401).send('la contraseña no coincide');
+    if(!compare) return res.status(401).send('Correo o contraseña incorrecta');
     
 	const token = jwt.sign({_id: colectivo._id}, 'secretKey');
 

@@ -38,11 +38,11 @@ router.post('/login', async (req, res) => {
     const { correoElectronico, contrasena } = req.body;
     const user = await User.findOne({correoElectronico});
     
-    if (!user) return res.status(401).send('El correo no existe');
+    if (!user) return res.status(401).send('Correo o contraseña incorreta');
     let compare = bcrypt.compareSync(contrasena, user.contrasena);
     console.log(contrasena)
     console.log(user.contrasena)
-    if(!compare) return res.status(401).send('la contraseña no coincide');
+    if(!compare) return res.status(401).send('Correo o contraseña incorreta');
     
 	const token = jwt.sign({_id: user._id}, 'secretKey');
 
@@ -119,7 +119,7 @@ router.put('/seguir-espacio', async (req, res) => {
   
         if (user.espacios.includes(espacio)) {
           console.log("El espacio ya está añadido para este usuario");
-          res.status(400).json({ message: "El espacio ya está añadido para este usuario" });
+          res.status(400).json({ message: "Ya sigues este espacio" });
         } else {
           await User.updateOne({ correoElectronico: correo }, { $push: { espacios: espacio } });
           console.log("Espacio añadido correctamente");
@@ -148,7 +148,7 @@ router.put('/seguir-espacio', async (req, res) => {
         if (user.espacios.includes(espacioId)) {
             await User.updateOne({ correoElectronico: correo }, { $pull: { espacios: espacioId } });
             console.log("Espacio dejado de seguir");
-            res.status(200).json({ message: "Espacio dejado de seguir" });
+            res.status(200).json({ message: "Has dejado de seguir este espacio" });
           } else {
             console.log("El usuario no sigue este espacio");
             res.status(400).json({ message: "El usuario no sigue este espacio" });
@@ -174,7 +174,7 @@ router.put('/seguir-espacio', async (req, res) => {
   
       if (user) {
         console.log(user);
-        res.status(200).json({ message: 'Usuario actualizado correctamente', user });
+        res.status(200).json({ message: 'Usuario actualizado correctamente' });
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
       }
