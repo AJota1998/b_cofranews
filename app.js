@@ -14,6 +14,7 @@ app.use((req, res, next) => {
   next();
 })
 
+
 app.use('/api', require('./routes/usuario'));
 app.use('/api', require('./routes/colectivo'));
 app.use('/api', require('./routes/espacio'));
