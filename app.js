@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://bcofranews-production.up.railway.app',
+  origin: '*',
   allowedHeaders: ['*'],
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
