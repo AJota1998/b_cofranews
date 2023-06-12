@@ -23,10 +23,10 @@ app.use(bodyParser.json());
 })*/
 
 
-app.use('/', require('./routes/usuario'));
-app.use('/', require('./routes/colectivo'));
-app.use('/', require('./routes/espacio'));
-app.use('/', require('./routes/publicacion'));
+app.use('', require('./routes/usuario'));
+app.use('', require('./routes/colectivo'));
+app.use('', require('./routes/espacio'));
+app.use('', require('./routes/publicacion'));
 
 const dotenv = require("dotenv");
 dotenv.config();
