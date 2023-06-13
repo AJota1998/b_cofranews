@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 app.use(express.json());
 app.use(cors({
-  origin: '*',
+  origin: 'https://ajota1998.github.io/',
   allowedHeaders: ['*'],
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
