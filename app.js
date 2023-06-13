@@ -6,28 +6,9 @@ const bodyParser = require('body-parser');
 
 
 app.use(express.json());
-/*app.use(cors({
-  origin: 'https://ajota1998.github.io',
-  allowedHeaders: ['Content-Type'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE']
-}));*/
+app.use(cors());
+ 
 
-app.use((req, res, next) => {
-  // Permitir solicitudes desde cualquier origen
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
-  // Permitir los métodos de solicitud que deseas permitir
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-
-  // Permitir los encabezados personalizados que deseas permitir
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  // Indicar si se deben permitir las cookies
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  // Continuar con el siguiente middleware
-  next();
-});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -39,10 +20,10 @@ app.use(bodyParser.json());
   next();
 })*/
 
-app.use('', require('./routes/usuario'));
-app.use('', require('./routes/colectivo'));
-app.use('', require('./routes/espacio'));
-app.use('', require('./routes/publicacion'));
+app.use('/', require('./routes/usuario'));
+app.use('/', require('./routes/colectivo'));
+app.use('/', require('./routes/espacio'));
+app.use('/', require('./routes/publicacion'));
 
 const dotenv = require("dotenv");
 dotenv.config();
