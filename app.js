@@ -6,7 +6,11 @@ const bodyParser = require('body-parser');
 
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://AJota1998.github.io'
+}
+ 
+));
  
 
 
