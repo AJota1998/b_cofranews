@@ -22,7 +22,6 @@ app.use(bodyParser.json());
   next();
 })*/
 
-
 app.use('', require('./routes/usuario'));
 app.use('', require('./routes/colectivo'));
 app.use('', require('./routes/espacio'));
