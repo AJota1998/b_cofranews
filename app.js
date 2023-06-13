@@ -6,13 +6,7 @@ const bodyParser = require('body-parser');
 
 
 app.use(express.json());
-/*app.use(cors(
-
-));*/
-
-app.configure(function() {
-  app.use(cors({ origin: "https://ajota1998.github.io/f_cofranews/", credentials: true }));
-});
+app.use(cors());
  
 
 
