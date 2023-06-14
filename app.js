@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 5000;
+//const PORT = 5000;
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -38,4 +38,4 @@ mongoose
   .catch((err) => console.error(err));
 var db = mongoose.connection;
 
-app.listen(PORT, () => console.log('listening on port 5000'));
+app.listen(process.env.PORT, () => console.log('listening on port 5000'));
